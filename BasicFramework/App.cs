@@ -13,9 +13,12 @@ namespace BasicFramework
         {
             Console.WriteLine("Setting up application\n");
 
-            Console.WriteLine("Mapping controllers\n");
             RouterKernel.UseRouting();
+            StartServer(host, port);
+        }
 
+        public static void StartServer(string host, int port)
+        {
             Console.WriteLine("Setting up hosting server\n");
             IPAddress localAddr = IPAddress.Parse(host);
             TcpListener server = new TcpListener(localAddr, port);
@@ -66,13 +69,6 @@ namespace BasicFramework
             }
 
             client.Close();
-        }
-
-        public static void RegisterDependency<Parent, Child>()
-            where Parent : class
-            where Child : Parent, new()
-        {
-            DIManager.RegisterDependency<Parent, Child>();
         }
     }
 }
