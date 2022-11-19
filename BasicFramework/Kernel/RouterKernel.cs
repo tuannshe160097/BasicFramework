@@ -5,6 +5,10 @@ namespace BasicFramework.Kernel
     using BasicFramework.DependencyInjection;
     using BasicFramework.Http;
 
+    /// <summary>
+    /// All routers have to inherit this class.
+    /// Does all the heavy lifting for routing requests to the correct controller
+    /// </summary>
     public abstract class RouterKernel
     {
         private class RouterBinding
@@ -72,18 +76,30 @@ namespace BasicFramework.Kernel
             AddRouter();
         }
 
+        /// <summary>
+        /// Routes should be added using this function
+        /// </summary>
         protected abstract void AddRouter();
 
+        /// <summary>
+        /// Create a new route
+        /// </summary>
         protected void Route<Controller>(HttpMethod method, string url, string function) where Controller : ControllerKernel
         {
             routes.Add((method, url), new RouterBinding(typeof(Controller), function));
         }
 
+        /// <summary>
+        /// Create a new route
+        /// </summary>
         protected void Route<Controller>(string url, string function) where Controller : ControllerKernel
         {
             routes.Add((HttpMethod.GET, url), new RouterBinding(typeof(Controller), function));
         }
 
+        /// <summary>
+        /// Create a new route
+        /// </summary>
         protected void Route<Controller>(string function) where Controller : ControllerKernel
         {
             routes.Add((HttpMethod.GET, $"/{typeof(Controller).Name}/{function}"), new RouterBinding(typeof(Controller), function));

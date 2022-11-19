@@ -17,7 +17,7 @@ namespace BasicFramework
             StartServer(host, port);
         }
 
-        public static void StartServer(string host, int port)
+        private static void StartServer(string host, int port)
         {
             Console.WriteLine("Setting up hosting server\n");
             IPAddress localAddr = IPAddress.Parse(host);

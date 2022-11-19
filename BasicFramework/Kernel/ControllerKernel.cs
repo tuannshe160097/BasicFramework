@@ -2,10 +2,13 @@
 
 namespace BasicFramework.Kernel
 {
+    /// <summary>
+    /// All controllers have to inherit this class. Currently doesn't do anything other than novelty
+    /// </summary>
     public abstract class ControllerKernel
     {
         /// <summary>
-        ///  Function is still in testing, DO NOT USE
+        /// Function is still in testing, DO NOT USE
         /// </summary>
         public T TryCastObject<T>(dynamic source) where T : new()
         {
