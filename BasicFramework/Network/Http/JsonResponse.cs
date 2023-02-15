@@ -1,11 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using BasicFramework.Network.Exception;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BasicFramework.Http
+namespace BasicFramework.Network.Http
 {
     public class JsonResponse : HttpResponse
     {

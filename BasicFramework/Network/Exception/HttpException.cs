@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BasicFramework.Http
+namespace BasicFramework.Network.Exception
 {
-    public class HttpException : Exception
+    public class HttpException : System.Exception
     {
         public int HttpStatus { get; set; }
         public object? Response { get; set; }

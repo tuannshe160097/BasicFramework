@@ -1,9 +1,11 @@
 ﻿using System.Reflection;
+using BasicFramework.DependencyInjection;
+using BasicFramework.Network.Exception;
+using BasicFramework.Network.Http;
+using HttpMethod = BasicFramework.Network.Http.HttpMethod;
 
 namespace BasicFramework.Kernel
 {
-    using BasicFramework.DependencyInjection;
-    using BasicFramework.Http;
 
     /// <summary>
     /// All routers have to inherit this class.
@@ -117,8 +119,15 @@ namespace BasicFramework.Kernel
             object? response = null;
             try
             {
-                response = method.Invoke(controller, new object[] { request });
-            } 
+                if (method.GetParameters().Length == 0)
+                {
+                    response = method.Invoke(controller, null);
+                } 
+                else
+                {
+                    response = method.Invoke(controller, new object[] { request });
+                }
+            }
             catch
             {
                 throw new Exception($"Endpoint {method.Name} of controller {binding.Controller.Name} is not valid");
@@ -133,7 +142,7 @@ namespace BasicFramework.Kernel
             return response.ToString();
         }
 
-        internal static void UseRouting()
+        internal static void MapRoutes()
         {
             Console.WriteLine("Mapping controllers\n");
             foreach (Type child in GetInheritedClasses(typeof(RouterKernel)))
@@ -142,9 +151,9 @@ namespace BasicFramework.Kernel
             }
         }
 
-        private static List<Type> GetInheritedClasses(Type MyType)
+        private static List<Type> GetInheritedClasses(Type type)
         {
-            return Assembly.GetEntryAssembly()?.GetTypes().Where(TheType => TheType.IsClass && !TheType.IsAbstract && TheType.IsSubclassOf(MyType)).ToList() ?? new List<Type>();
+            return Assembly.GetEntryAssembly()?.GetTypes().Where(T => T.IsClass && !T.IsAbstract && T.IsSubclassOf(type)).ToList() ?? new List<Type>();
         }
     }
 }

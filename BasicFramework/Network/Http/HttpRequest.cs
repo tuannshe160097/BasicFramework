@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using BasicFramework.Network.Exception;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Dynamic;
 
-namespace BasicFramework.Http
+namespace BasicFramework.Network.Http
 {
     public class HttpRequest
     {
@@ -10,14 +12,15 @@ namespace BasicFramework.Http
         public string Protocol { get; set; }
         public Dictionary<string, string> Headers { get; set; } = new();
         public string BodyRaw { get; set; }
-        //This is an ExpandoObject
+
+        //JObject
         public dynamic Body { get; set; }
 
         public HttpRequest(string data)
         {
-            if (data == null)
+            if (string.IsNullOrWhiteSpace(data))
             {
-                throw new Exception("Empty data");
+                throw new EmptyRequestException();
             }
 
             StringReader reader = new(data);
@@ -52,7 +55,7 @@ namespace BasicFramework.Http
                 {
                     BodyRaw = urlWithParam[1];
 
-                    var body = new ExpandoObject() as IDictionary<string, object>;
+                    var body = new Dictionary<string, object>();
 
                     string[] parameters = urlWithParam[1].Split("&");
                     foreach (string parameter in parameters)
@@ -71,7 +74,7 @@ namespace BasicFramework.Http
                 BodyRaw = body;
 
                 //@TODO Add support for header Content-Type
-                Body = JsonConvert.DeserializeObject<ExpandoObject>(body);
+                Body = JObject.Parse(body);
             }
         }
     }

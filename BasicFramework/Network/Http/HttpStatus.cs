@@ -1,4 +1,4 @@
-﻿namespace BasicFramework.Http
+﻿namespace BasicFramework.Network.Http
 {
     public static class HttpStatus
     {
