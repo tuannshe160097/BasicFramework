@@ -24,7 +24,7 @@ namespace BasicFramework.Network.Tcp
             TcpListener server = new TcpListener(localAddr, Config.Port);
             server.Start();
 
-            Console.WriteLine("Waiting for requests\n");
+            Console.WriteLine($"Waiting for requests at {Config.Host}:{Config.Port}\n");
             while (true)
             {
                 TcpClient client = server.AcceptTcpClient();

@@ -1,5 +1,5 @@
 ﻿using BasicFramework.Config.Exception;
-using BasicFramework.Kernel;
+using BasicFramework.DataType;
 using Newtonsoft.Json;
 
 namespace BasicFramework.Config
@@ -12,15 +12,12 @@ namespace BasicFramework.Config
         [ConfigRequired]
         public static readonly int Port;
 
-        public static readonly List<int> list;
-
         public static readonly dynamic Env;
 
         static Config()
         {
             string exeDir = AppDomain.CurrentDomain.BaseDirectory;
-            //JObject config = JObject.Parse(File.ReadAllText(exeDir + "application.json"));
-            dynamic config = JsonConvert.DeserializeObject<DDCollection>(File.ReadAllText(exeDir + "application.json"));
+            dynamic? config = JsonConvert.DeserializeObject<TObject>(File.ReadAllText(exeDir + "application.json"));
 
             if (config == null)
             {
@@ -40,7 +37,14 @@ namespace BasicFramework.Config
                 {
                     try
                     {
-                        field.SetValue(null, Convert.ChangeType(value, field.FieldType));
+                        if (value is IConvertible)
+                        {
+                            field.SetValue(null, Convert.ChangeType(value, field.FieldType));
+                        }
+                        else
+                        {
+                            field.SetValue(null, value);
+                        }
                     }
                     catch (TypeInitializationException e)
                     {
